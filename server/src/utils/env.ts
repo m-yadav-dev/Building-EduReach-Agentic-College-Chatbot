@@ -1,0 +1,28 @@
+
+
+import dotenv from 'dotenv'; 
+
+dotenv.config();
+
+const trimEnvValue = (value: string | undefined): string | undefined => {
+    if (typeof value !== 'string') {
+        return value;
+    }
+
+    const trimmedValue = value.trim();
+    return trimmedValue.length > 0 ? trimmedValue : undefined;
+};
+
+const ENV_VARS = {
+    PORT: trimEnvValue(process.env.PORT),
+    MONGODB_URI: trimEnvValue(process.env.MONGODB_URI),
+    JWT_SECRET: trimEnvValue(process.env.JWT_SECRET),
+    JWT_EXPIRES_IN: trimEnvValue(process.env.JWT_EXPIRES_IN),
+    CLIENT_URL: trimEnvValue(process.env.CLIENT_URL)
+
+}
+
+export default ENV_VARS;
+
+
+
