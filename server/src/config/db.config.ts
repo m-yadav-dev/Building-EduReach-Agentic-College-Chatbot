@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+// import ENV_VARS from '../utils/env.ts';
 import ENV_VARS from '../utils/env.ts';
 
 const connectDB = async (): Promise<boolean> => {

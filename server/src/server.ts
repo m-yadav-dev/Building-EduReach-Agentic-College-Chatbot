@@ -1,8 +1,10 @@
-import app from './src/app.ts';
-import connectDB from './src/config/db.config.ts';
-import ENV_VARS from './src/utils/env.ts';
+// import app from './src/app.ts';
+// import connectDB from './src/config/db.config.ts';
+// import ENV_VARS from './src/utils/env.ts';
 
-
+import app from "./app.ts";
+import connectDB from "./config/db.config.ts";
+import ENV_VARS from "./utils/env.ts";
 const PORT = ENV_VARS.PORT || 5000;
 
 const startServer = async (): Promise<void> => {
