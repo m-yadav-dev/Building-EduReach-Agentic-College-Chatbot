@@ -5,7 +5,9 @@ const SALT_ROUNDS = 10;
 
 
 export const hashPassword = async (plainPassword: string): Promise<string> => {
-    const salt = await bcrypt.getSalt(SALT_ROUNDS);
+    
+    console.log(`Received password type: ${typeof plainPassword}, value: ${plainPassword}`);
+    const salt = await bcrypt.genSalt(Number(SALT_ROUNDS));
     return bcrypt.hash(plainPassword, salt);
 }
 

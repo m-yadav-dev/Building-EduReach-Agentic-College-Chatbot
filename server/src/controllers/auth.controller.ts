@@ -33,7 +33,7 @@ export const register = async (req: Request, res: Response, next: NextFunction):
         }
 
         const hashedPassword = await hashPassword(password);
-
+        console.log(`✅ Step 1: hashedPassword generated successfully for email: ${email}`);
         const newUser = await User.create({
             name,
             email: email.toLowerCase(),
@@ -41,10 +41,10 @@ export const register = async (req: Request, res: Response, next: NextFunction):
             phone: phone || null
         });
 
-        await newUser.save();
+        console.log(`✅ Step 2: User document created successfully for email: ${email}, userId: ${newUser._id}`);
 
         const token = generationToken({ id: newUser._id, email: newUser.email });
-
+        console.log(`✅ Step 3: JWT token generated successfully for email: ${email}, userId: ${newUser._id}`);
         res.status(201).json({
             success: true,
             message: "User registered successfully",
