@@ -6,8 +6,10 @@ import { generationToken } from "../utils/jwt.util.ts";
 
 // Register API endpoint - POST /api/auth/register
 export const register = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    console.log(`🔍 Register API called with body: ${JSON.stringify(req.body)}`);
     try {
         const { email, password, name, phone } = req.body;
+        console.log(`🔍 Register API called with email: ${email}, name: ${name}`);
 
         if (!email || !password || !name) {
             res.status(400).json({ success: false, message: "Name, email, and password are required" });
@@ -121,8 +123,8 @@ export const getProfile = async (req: Request, res: Response, next: NextFunction
             return;
         }
 
-        const user = await User.findById(currentUser.userId).select("-password");
-
+        const user = await User.findOne({ email: currentUser.email }).select("-password");
+        console.log(`✅ Step 4: User profile retrieved successfully for userId: ${currentUser.email}`);
         if (!user) {
             res.status(404).json({ success: false, message: "User not found" });
             return;
