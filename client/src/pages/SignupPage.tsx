@@ -49,7 +49,9 @@ const SignupPage = () => {
             navigate("/"); // after successful signup, navigate to the home page or dashboard page of the application
         }
         catch (error: any) {
+
             const errorMsg = error.response?.data?.message || "Signup failed. Please try again.";
+            console.log(error);
             toast.error(errorMsg);
         }
         finally {

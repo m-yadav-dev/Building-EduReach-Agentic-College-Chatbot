@@ -18,7 +18,8 @@ const ENV_VARS = {
     MONGODB_URI: trimEnvValue(process.env.MONGODB_URI),
     JWT_SECRET: trimEnvValue(process.env.JWT_SECRET),
     JWT_EXPIRES_IN: trimEnvValue(process.env.JWT_EXPIRES_IN),
-    CLIENT_URL: trimEnvValue(process.env.CLIENT_URL)
+    CLIENT_URL: trimEnvValue(process.env.CLIENT_URL), 
+    GOOGLE_API_KEY: trimEnvValue(process.env.GOOGLE_API_KEY),
 
 }
 
