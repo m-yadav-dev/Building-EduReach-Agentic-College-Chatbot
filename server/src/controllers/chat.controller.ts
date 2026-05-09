@@ -1,5 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
-import { getRAGResponse } from "../services/rag.service.ts";
+import { getRAGResponse } from "../services/rag/rag.service.ts";
 
 
 

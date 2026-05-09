@@ -3,8 +3,9 @@
 // import ENV_VARS from './src/utils/env.ts';
 
 import app from "./app.ts";
-import connectDB from "./config/db.config.ts";
-import { initializeKnowledgeBase } from "./services/rag.service.ts";
+// import connectDB from "./config/db.config.ts";
+import { connectDB } from "./config/db.config.ts";
+import { initializeKnowledgeBase } from "./services/rag/indexer.ts";
 import ENV_VARS from "./utils/env.ts";
 const PORT = ENV_VARS.PORT || 5000;
 

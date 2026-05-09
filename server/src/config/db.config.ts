@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 // import ENV_VARS from '../utils/env.ts';
 import ENV_VARS from '../utils/env.ts';
+import { MongoClient } from 'mongodb';
 
 const connectDB = async (): Promise<boolean> => {
     try {
@@ -25,6 +26,18 @@ const connectDB = async (): Promise<boolean> => {
     }
 }
 
-export default connectDB;
+
+let mongoClient: MongoClient | null = null; // Declaring a variable 'mongoClient' to hold the MongoDB client instance, initialized to null
+const connectToMongoDB = async () => {
+    if (!mongoClient) {
+        mongoClient = new MongoClient(ENV_VARS.MONGODB_URI || ""); // Creating a new MongoDB client instance with the connection string from the environment variable 'MONGODB_URI'
+        await mongoClient.connect();
+    }
+    return mongoClient; // Returning the connected MongoDB client instance
+}
 
 
+
+
+
+export { connectDB, connectToMongoDB }; // Exporting the 'connectDB' and 'connectToMongoDB' functions for use in other parts of the application
