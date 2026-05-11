@@ -5,6 +5,7 @@ import router from './routes/auth.routes.ts';
 import errorHandler from './middleware/error-handler.middleware.ts';
 import ENV_VARS from './utils/env.ts';
 import chatRoutes from './routes/chat.routes.ts';
+import callRouter from './routes/vapi.routes.ts';
 
 
 const app: Application = express();
@@ -22,7 +23,7 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 app.use('/api/auth', router); // Registering the authentication routes with the Express application, so that any requests to endpoints starting with '/api/auth' will be handled by the routes defined in 'router' (which is imported from './routes/auth.routes.ts')
 app.use('/api/chat', chatRoutes); // Registering the chat routes with the Express application, so that any requests to endpoints starting with '/api/chat' will be handled by the routes defined in 'chatRoutes'
-
+app.use('/api/vapi', callRouter); // Registering the VAPI routes with the Express application, so that any requests to endpoints starting with '/api/vapi' will be handled by the routes defined in 'callRouter'
 app.use((req: Request, res: Response) => {
     res.status(404).json({
         success: false,

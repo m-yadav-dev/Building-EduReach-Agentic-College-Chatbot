@@ -20,6 +20,9 @@ const ENV_VARS = {
     JWT_EXPIRES_IN: trimEnvValue(process.env.JWT_EXPIRES_IN),
     CLIENT_URL: trimEnvValue(process.env.CLIENT_URL), 
     GOOGLE_API_KEY: trimEnvValue(process.env.GOOGLE_API_KEY),
+    VAPI_API_KEY: trimEnvValue(process.env.VAPI_API_KEY),
+    VAPI_ASSISTANT_ID: trimEnvValue(process.env.VAPI_ASSISTANT_ID),
+    VAPI_PHONE_NUMBER_ID: trimEnvValue(process.env.VAPI_PHONE_NUMBER_ID),
 
 }
 
