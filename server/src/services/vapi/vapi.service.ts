@@ -1,87 +1,72 @@
+
+
+// handle VAPI calls for outbound calling
+
 import ENV_VARS from "../../utils/env.ts";
 
 
 
-
-
 interface CallPayload {
-    // support both `phoneNumber` and `phone` keys (controller may send either)
-    phoneNumber?: string;
-    phone?: string;
+    phoneNumber: string;
     userName: string;
     userEmail: string;
-    // support both `preferredCourse` and `course`
     preferredCourse?: string;
-    course?: string;
-    // support both `queryTopics` and `topic`
-    queryTopics?: string;
-    topic?: string;
+    queryTopic?: string;
 }
 
-interface VapiCallService {
-    id: string;
-    status: string;
-    [key: string]: any;
+interface VapiCallResponse {
+    id: string; // Unique identifier for the call
+    status: string; // e.g., "queued", "in-progress", "completed", "failed"
+    [key: string]: unknown; // Allow for additional properties in the response
 }
 
-export const initialOutboundCallPayload = async (payload: CallPayload): Promise<VapiCallService> => {
-    // accept multiple possible keys from callers and normalize
-    const phoneNumber = payload.phoneNumber ?? payload.phone;
-    const userName = payload.userName;
-    const userEmail = payload.userEmail;
-    const preferredCourse = payload.preferredCourse ?? payload.course;
-    const queryTopics = payload.queryTopics ?? payload.topic;
-
-    const VAPI_API_KEY = ENV_VARS.VAPI_API_KEY;
-    const VAPI_PHONE_NUMBER_ID = ENV_VARS.VAPI_PHONE_NUMBER_ID;
-    const VAPI_ASSISTANT_ID = ENV_VARS.VAPI_ASSISTANT_ID;
 
 
-    if (!VAPI_API_KEY || !VAPI_PHONE_NUMBER_ID || !VAPI_ASSISTANT_ID) {
-        throw new Error("Missing required VAPI configuration variables");
-    }
+export const initiateOutboundCall = async (payload: CallPayload): Promise<VapiCallResponse> => {
+  const { phoneNumber, userName, userEmail, preferredCourse, queryTopic } = payload;
 
-    // validate phone number
-    if (!phoneNumber || typeof phoneNumber !== "string") {
-        throw new Error("Invalid or missing phone number for VAPI call");
-    }
+  const VAPI_API_KEY = ENV_VARS.VAPI_API_KEY;
+  const VAPI_PHONE_NUMBER_ID = ENV_VARS.VAPI_PHONE_NUMBER_ID;
+  const VAPI_ASSISTANT_ID = ENV_VARS.VAPI_ASSISTANT_ID;
 
-    // format phone number - ensure +91 for Indian numbers
-    const formattedPhone = phoneNumber.startsWith("+") ? phoneNumber : `+91${phoneNumber.replace(/^0+/, "")}`;
+  if (!VAPI_API_KEY || !VAPI_PHONE_NUMBER_ID || !VAPI_ASSISTANT_ID) {
+    throw new Error("Vapi configuration missing. Check VAPI_API_KEY, VAPI_PHONE_NUMBER_ID, VAPI_ASSISTANT_ID in .env");
+  }
 
-    const response = await fetch("https://api.vapi.ai/call", {
-        method: "POST",
-        headers: {
-            Authorization: `Bearer ${VAPI_API_KEY}`,
-            "Content-Type": "application/json",
+  // Format phone number — ensure +91 prefix for Indian numbers
+  const formattedPhone = phoneNumber.startsWith("+") ? phoneNumber : `+91${phoneNumber.replace(/^0+/, "")}`;
+
+  const response = await fetch("https://api.vapi.ai/call", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${VAPI_API_KEY}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      assistantId: VAPI_ASSISTANT_ID,
+      assistantOverrides: {
+        firstMessage: `Hi ${userName}, this is Ava from EduReach College. I'm calling to help you with information about ${preferredCourse || "our programs"}. Do you have a quick moment?`,
+        variableValues: {
+          studentName: userName,
+          studentEmail: userEmail,
+          preferredCourse: preferredCourse || "Not specified",
+          queryTopic: queryTopic || "General inquiry",
         },
-        body: JSON.stringify({
-            assistantId: VAPI_ASSISTANT_ID,
-            assistantOverrides: {
-                firstMessage: `Hi ${userName}, this is Ava from EduReach. I am here to assist you with your college queries. I see that you are interested in ${preferredCourse || "various courses"}. Could you please tell me more about your query or the topics you are interested in?`,
-                variableValues: {
-                    studentName: userName,
-                    studentEmail: userEmail,
-                    preferredCourse: preferredCourse || "Not specified",
-                    queryTopics: queryTopics || "General inquiry",
-                }
-            },
-            phoneNumberId: VAPI_PHONE_NUMBER_ID,
-            customer: {
-                number: formattedPhone,
-                name: userName,
-            }
-        })
-    })
+      },
+      phoneNumberId: VAPI_PHONE_NUMBER_ID,
+      customer: {
+        number: formattedPhone,
+        name: userName,
+      },
+    }),
+  });
 
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    console.error("Vapi API Error:", errorData);
+    throw new Error(`Vapi call failed with status ${response.status}: ${JSON.stringify(errorData)}`);
+  }
 
-    if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        console.error(`Failed to initiate call with VAPI. Status: ${response.status}, Response:`, errorData);
-        throw new Error(`Failed to initiate call with VAPI. Status: ${response.status}, Response: ${JSON.stringify(errorData)}`);
-    }
-
-    const data = (await response.json()) as VapiCallService;
-    return data;
-
-} 
+  const data = (await response.json()) as VapiCallResponse;
+  return data;
+};
