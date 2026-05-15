@@ -37,8 +37,9 @@ const createRetrieveTool = (vectorStore: MongoDBAtlasVectorSearch) => {
 export const getRAGResponse = async (question: string): Promise<string> => {
   try {
     const vectorStore = await getVectorStore();
-    const retrieve = createRetrieveTool(vectorStore);
 
+    const retrieve = createRetrieveTool(vectorStore);
+    console.log(`Retrieval Data:`, retrieve);
     const model = new ChatGoogleGenerativeAI({
       model: "gemini-2.5-flash-lite",
       temperature: 0.7,
@@ -58,7 +59,7 @@ export const getRAGResponse = async (question: string): Promise<string> => {
     const result = await agent.invoke({
       messages: [{ role: "user", content: question }],
     });
-
+    console.log(`RAG Agent Result:`, result);
     const messages = result.messages;
     const lastMessage = messages[messages.length - 1];
 
@@ -74,3 +75,5 @@ export const getRAGResponse = async (question: string): Promise<string> => {
     return "I'm having trouble right now. Please try again or click 'Talk to Us'.";
   }
 };
+
+

@@ -11,7 +11,7 @@ import axiosInstance from "./api";
 
 export const sendMessage = async (message: string) => { // API call to send a message to the backend and receive a response
     const response = await axiosInstance.post("/chat/message", { message }); // backend returns { success, message, data: { answer } } 
-    return response.data.data; // return the answer from the backend
+    return response.data.message; // return the answer from the backend
 }
 
 

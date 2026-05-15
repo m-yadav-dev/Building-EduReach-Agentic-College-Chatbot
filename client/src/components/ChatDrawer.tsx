@@ -31,7 +31,7 @@ const quickQuestions = [
     "How do I enroll in a course?",
     "What is the duration of your courses?",
 ]
-const ChatDrawer = ({open, onClose}: ChatDrawerProps) => {
+const ChatDrawer = ({ open, onClose }: ChatDrawerProps) => {
     const { user } = useAuth(); // we can use this to get user info if needed for personalized responses from the bot in the future
     const [messages, setMessages] = React.useState<Message[]>([
         {
@@ -68,15 +68,17 @@ const ChatDrawer = ({open, onClose}: ChatDrawerProps) => {
 
 
         try {
-            const data = await sendMessage(messageText); // data will be { answer: string } as returned from chat.service.ts
+            const message = await sendMessage(messageText); // data will be { answer: string } as returned from chat.service.ts
+            console.log(message);
             const botMessage: Message = {
                 id: Date.now() + 1,
-                text: data.message, // data.message contains the answer from the backend
+                text: message || "Sorry, I couldn't fetch the answer. Please try again.",
                 sender: "bot"
             }
             setMessages((prev) => [...prev, botMessage]);
         }
         catch (error) {
+            console.log(`Error Details:`, error);
             const errorMessage: Message = { id: Date.now() + 1, text: "Sorry something went wrong. Please try again.", sender: "bot" }
             setMessages((prev) => [...prev, errorMessage]);
         }
@@ -117,7 +119,7 @@ const ChatDrawer = ({open, onClose}: ChatDrawerProps) => {
                         <Minus className="w-4 h-4" />
                     </button>
                     <button onClick={onClose} className="text-white/70 hover:text-white p-1 transition-colors duration-200">
-                        <X className="w-4 h-4" />   
+                        <X className="w-4 h-4" />
                     </button>
                 </div>
             </div>
