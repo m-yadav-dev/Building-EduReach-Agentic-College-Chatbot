@@ -15,7 +15,7 @@ export const getVectorStore = async () => {
 
   return new MongoDBAtlasVectorSearch(getEmbeddingsModel(), {
     collection: collection as any, // Providing the MongoDB collection to be used for storing and searching vector embeddings
-    indexName: "embedding_index", // Specifying the name of the vector index to be used in MongoDB Atlas for efficient similarity search on the embeddings
+    indexName: "edureach_search_index", // Specifying the name of the vector index to be used in MongoDB Atlas for efficient similarity search on the embeddings
     textKey: "text", // Specifying the key in the MongoDB documents that contains the original text content, which will be used for retrieval and display purposes when relevant documents are found based on vector similarity
     embeddingKey: "embedding" // Specifying the key in the MongoDB documents that contains the vector embeddings, which will be used for performing similarity search to find relevant documents based on the input query's embedding
   })

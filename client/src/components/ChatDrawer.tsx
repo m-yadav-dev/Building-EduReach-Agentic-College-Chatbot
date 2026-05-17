@@ -69,7 +69,6 @@ const ChatDrawer = ({ open, onClose }: ChatDrawerProps) => {
 
         try {
             const message = await sendMessage(messageText); // data will be { answer: string } as returned from chat.service.ts
-            console.log(message);
             const botMessage: Message = {
                 id: Date.now() + 1,
                 text: message || "Sorry, I couldn't fetch the answer. Please try again.",

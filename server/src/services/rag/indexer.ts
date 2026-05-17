@@ -82,8 +82,8 @@ export const initializeKnowledgeBase = async (): Promise<void> => {
     });
 
     if (verifyDoc && Array.isArray(verifyDoc.embedding) && verifyDoc.embedding.length > 0) {
-        console.log(`    ${allSplits.length} chunks stored (${verifyDoc.embedding.length}D embeddings)`);
-        console.log(`     IMPORTANT: Create Atlas Vector Search index with numDimensions: ${verifyDoc.embedding.length}`);
+        console.log(`${allSplits.length} chunks stored (${verifyDoc.embedding.length}D embeddings)`);
+        console.log(`IMPORTANT: Create Atlas Vector Search index with numDimensions: ${verifyDoc.embedding.length}`);
     } else {
         await collection.deleteMany({});
         throw new Error(" Embeddings are empty! Google API returned no vectors.");
