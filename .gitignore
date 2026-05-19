@@ -12,7 +12,6 @@
 
 /server/.env
 /client/.env
-/tsconfig.json
 /webpack.config.js
 /.eslintcache
 /.prettiercache
