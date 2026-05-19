@@ -22,7 +22,7 @@
   "include": [
     "src/**/*",
     "scripts/**/*"
-, "src/server.ts"  ],
+, "server.ts"  ],
   "exclude": [
     "node_modules",
     "dist"
