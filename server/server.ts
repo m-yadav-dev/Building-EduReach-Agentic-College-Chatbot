@@ -13,6 +13,7 @@ const startServer = async (): Promise<void> => {
             console.log(`🚀 EduReach Server is running on port ${PORT}...`);
             console.log(`🌐 API Endpoint: http://localhost:${PORT}/api/auth`);
             console.log(`🌐 Chat Endpoint: http://localhost:${PORT}/api/chat`);
+            console.log(`🌐 NODE ENVIRONMENT: ${ENV_VARS.NODE_ENV}`);
             if (isDbConnected) {
                 console.log(`📂 Server is connected to MongoDB and ready to handle requests.`);
             }
