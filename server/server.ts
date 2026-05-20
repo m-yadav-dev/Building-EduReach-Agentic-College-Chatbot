@@ -29,7 +29,14 @@ const startServer = async (): Promise<void> => {
 
     catch (error) {
         console.error('❌ Error starting the server:', error);
+
+        if (!ENV_VARS.MONGODB_URI || !ENV_VARS.VAPI_API_KEY) {
+            console.error('⚠️  Missing required environment variables. Please ensure that MONGODB_URI and VAPI_API_KEY are set in your .env file.');
+            process.exit(1);
+        }
+
         process.exit(1);
+
     }
 }
 

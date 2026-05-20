@@ -6,12 +6,23 @@ import errorHandler from './middleware/error-handler.middleware.ts';
 import ENV_VARS from './utils/env.ts';
 import chatRoutes from './routes/chat.routes.ts';
 import callRouter from './routes/vapi.routes.ts';
+import { timeStamp } from 'node:console';
 
 
 const app: Application = express();
+app.set('trust proxy', true); // Enable trust proxy to get the correct client IP address when behind a proxy (like in production environments)
+
+const allowedOrigins = [ENV_VARS.CLIENT_URL || 'http://localhost:5173', 'https://edureach.vercel.app'];
 
 app.use(cors({
-    origin: ENV_VARS.CLIENT_URL || 'http://localhost:5173',
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+            callback(null, true);
+        }
+        else {
+            callback(new Error('CORS policy violation: Origin not allowed by CORS'));
+        }
+    },
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization"]
@@ -30,6 +41,14 @@ app.use((req: Request, res: Response) => {
         message: 'The requested resource was not found on this server.'
     })
 })
+
+app.get('/health', (req: Request, res: Response) => {
+    res.status(200).json({
+        status: 'success',
+        message: 'EduReach API is healthy and running smoothly.',
+        timeStamp: new Date().toISOString()
+    })
+});
 
 app.use(errorHandler);
 
