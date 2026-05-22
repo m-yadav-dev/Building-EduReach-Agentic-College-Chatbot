@@ -6,7 +6,6 @@ import errorHandler from './middleware/error-handler.middleware.ts';
 import ENV_VARS from './utils/env.ts';
 import chatRoutes from './routes/chat.routes.ts';
 import callRouter from './routes/vapi.routes.ts';
-import { timeStamp } from 'node:console';
 
 
 const app: Application = express();
