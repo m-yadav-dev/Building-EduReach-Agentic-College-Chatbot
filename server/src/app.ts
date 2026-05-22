@@ -11,7 +11,7 @@ import callRouter from './routes/vapi.routes.ts';
 const app: Application = express();
 app.set('trust proxy', true); // Enable trust proxy to get the correct client IP address when behind a proxy (like in production environments)
 
-const allowedOrigins = [ENV_VARS.CLIENT_URL || 'http://localhost:5173', 'https://edureach.vercel.app'];
+const allowedOrigins = [ENV_VARS.CLIENT_URL || 'http://localhost:5173', 'https://edurati.vercel.app'];
 
 app.use(cors({
     origin: (origin, callback) => {
